@@ -3,7 +3,11 @@ import BaseFooter from '@/components/BaseFooter.vue';
 </script>
 
 <template>
-  <div class="content"></div>
+  <router-view class="content" v-slot="{ Component }">
+    <transition name="fade">
+      <component :is="Component" />
+    </transition>
+  </router-view>
   <BaseFooter />
 </template>
 
@@ -14,5 +18,10 @@ import BaseFooter from '@/components/BaseFooter.vue';
   left: 0;
   right: 0;
   bottom: var(--footer-height);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

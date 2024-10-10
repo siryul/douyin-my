@@ -1,20 +1,59 @@
 <template>
-  <ul class="footer">
-    <li class="item">首页</li>
-    <li class="item">商城</li>
+  <ul class="footer" @click="navTo" ref="footer">
     <li class="item">
-      <div class="add-btn">
+      <router-link to="/">首页</router-link>
+    </li>
+    <li class="item">
+      <router-link to="/shop">商城</router-link>
+    </li>
+    <li class="item">
+      <div class="add-btn" ref="addBtn">
         <img src="../assets/img/icon/add-light.png" class="add" />
       </div>
     </li>
     <li class="item">
-      消息
+      <router-link to="/message">消息</router-link>
       <div class="badge">2</div>
     </li>
-    <li class="item">我</li>
+    <li class="item">
+      <router-link to="/me">我</router-link>
+    </li>
   </ul>
 </template>
-<script setup></script>
+
+<script setup>
+import { watch, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const footer = ref(null);
+const addBtn = ref(null);
+
+watch(
+  () => route.path,
+  (newVal, oldVal) => {
+    if (newVal === '/shop') {
+      if (footer.value) {
+        footer.value.style.backgroundColor = '#FFF';
+        footer.value.style.color = '#000';
+      }
+      if (addBtn.value) {
+        addBtn.value.style.backgroundColor = '#000';
+      }
+    } else {
+      if (footer.value) {
+        footer.value.style.backgroundColor = '#000';
+        footer.value.style.color = '#FFF';
+      }
+      if (addBtn.value) {
+        addBtn.value.style.backgroundColor = 'transparent';
+      }
+    }
+  }
+);
+</script>
+
 <style lang="scss" scoped>
 @import '../styles/mixins.scss';
 
