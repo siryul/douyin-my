@@ -1,9 +1,18 @@
-<script setup></script>
+<script setup>
+import BaseFooter from '@/components/BaseFooter.vue';
+</script>
 
 <template>
-  <div>
-    <h1>Douyin-my</h1>
-  </div>
+  <div class="content"></div>
+  <BaseFooter />
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--footer-height);
+}
+</style>
