@@ -1,5 +1,24 @@
 <script setup>
+import { ref } from 'vue';
 import { Icon } from '@iconify/vue';
+import { recommendedShop } from '@/api/user';
+import Waterfall from '@/components/Waterfall.vue';
+import { useNav } from '@/utils/hooks/useNav';
+
+const nav = useNav();
+
+const goods = ref([]);
+
+recommendedShop().then((res) => {
+  if (res.success) {
+    // console.log('goods', res.data);
+    goods.value = res.data;
+  }
+});
+
+const routeToDetail = (item) => {
+  nav('/shop/detail', {}, item);
+};
 </script>
 <template>
   <div class="shop">
@@ -79,6 +98,23 @@ import { Icon } from '@iconify/vue';
           </div>
         </div>
       </div>
+      <Waterfall :list="goods" v-slot="{ item }">
+        <div class="goods-item" @click="routeToDetail(item)">
+          <img :src="item.cover" class="cover" />
+          <div class="desc">
+            <div class="name">{{ item.name }}</div>
+            <span class="discount" v-if="item.discount">
+              {{ item.discount }}
+            </span>
+            <div class="price_container">
+              <span class="m">￥</span>
+              <span class="price">{{ item.price }}</span>
+              <span class="sold">已售{{ item.sold }}件</span>
+            </div>
+            <div class="low-price" v-if="item.isLowPrice">近期最低价</div>
+          </div>
+        </div>
+      </Waterfall>
     </div>
   </div>
 </template>
@@ -98,11 +134,12 @@ import { Icon } from '@iconify/vue';
     font-size: 20rem;
     position: fixed;
     top: 0;
-    left: 10rem;
-    right: 10rem;
+    left: 0;
+    right: 0;
     z-index: 2;
-    background-color: #f7f7f7;
-    padding: 10rem 0;
+    background-color: rgba(247, 247, 247, 0.5);
+    backdrop-filter: blur(50rem);
+    padding: 10rem;
   }
 }
 
@@ -161,7 +198,7 @@ import { Icon } from '@iconify/vue';
   overflow: hidden;
   padding: 10rem 16rem;
   font-size: 30rem;
-  gap: 16rem;
+  gap: 20rem;
   overflow-x: auto;
 
   .option {
@@ -209,6 +246,56 @@ import { Icon } from '@iconify/vue';
   img {
     width: 52rem;
     height: 52rem;
+  }
+}
+
+.goods-item {
+  margin-bottom: 10rem;
+  background-color: #fff;
+  border-radius: 10rem;
+  overflow: hidden;
+}
+
+.cover {
+  width: 100%;
+  // outline: 1px solid #000;
+}
+
+.desc {
+  padding: 10rem;
+
+  .name {
+    @include text-ellispis(2);
+  }
+  .discount {
+    $color: #b05560;
+    color: $color;
+    font-size: 10rem;
+    border: 1px solid $color;
+    padding: 2rem;
+    margin-top: 5rem;
+    display: inline-block;
+  }
+
+  .price_container {
+    margin: 5rem 0;
+    color: var(--primary-btn-color);
+    font-size: 10rem;
+
+    .price {
+      font-size: 18rem;
+      margin-right: 4rem;
+      font-weight: 500;
+    }
+
+    .sold {
+      color: var(--second-text-color);
+    }
+  }
+
+  .low-price {
+    font-size: 12rem;
+    color: #d89b69;
   }
 }
 </style>

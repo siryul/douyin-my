@@ -10,3 +10,11 @@
   justify-content: $pos;
   align-items: $pos;
 }
+
+@mixin text-ellispis($line-clamp: 1) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $line-clamp;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}

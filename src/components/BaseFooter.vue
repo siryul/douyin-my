@@ -1,5 +1,5 @@
 <template>
-  <ul class="footer" @click="navTo" ref="footer">
+  <ul class="footer" @click="navTo" ref="footer" :class="theme">
     <li class="item">
       <router-link to="/">首页</router-link>
     </li>
@@ -22,40 +22,40 @@
 </template>
 
 <script setup>
-import { watch, ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
-const footer = ref(null);
-const addBtn = ref(null);
-
-watch(
-  () => route.path,
-  (newVal, oldVal) => {
-    if (newVal === '/shop') {
-      if (footer.value) {
-        footer.value.style.backgroundColor = '#FFF';
-        footer.value.style.color = '#000';
-      }
-      if (addBtn.value) {
-        addBtn.value.style.backgroundColor = '#000';
-      }
-    } else {
-      if (footer.value) {
-        footer.value.style.backgroundColor = '#000';
-        footer.value.style.color = '#FFF';
-      }
-      if (addBtn.value) {
-        addBtn.value.style.backgroundColor = 'transparent';
-      }
-    }
-  }
-);
+const theme = computed(() => {
+  return route.path === '/shop' ? 'light' : 'dark';
+});
 </script>
 
 <style lang="scss" scoped>
 @import '../styles/mixins.scss';
+
+.dark {
+  background-color: var(--footer-color);
+
+  .add-btn {
+    outline-color: #fff;
+  }
+}
+
+.light {
+  background-color: #fff;
+  color: #000;
+
+  .add-btn {
+    outline-color: #000;
+    background-color: #000;
+  }
+
+  .badge {
+    color: #fff;
+  }
+}
 
 .footer {
   position: fixed;
@@ -67,7 +67,6 @@ watch(
   align-items: center;
   padding: 0 20rem;
   font-size: 14rem;
-  background-color: var(--footer-color);
   .item {
     flex: 1;
     text-align: center;
@@ -80,7 +79,7 @@ watch(
   .add-btn {
     width: 40rem;
     height: 26rem;
-    outline: 2.5rem solid #fff;
+    outline: 2.5rem solid;
     border-radius: 4rem;
     @include self-center;
     @include flex-position;

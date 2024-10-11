@@ -19,4 +19,9 @@ export default [
     name: 'Me',
     component: () => import('@/pages/me/index.vue'),
   },
+  {
+    path: '/shop/detail',
+    name: 'GoodsDetail',
+    component: () => import('@/pages/shop/GoodsDetail.vue'),
+  },
 ];
